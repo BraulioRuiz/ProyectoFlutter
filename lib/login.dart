@@ -1,7 +1,43 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:proyectomovil/inicio.dart';
 
-class Login extends StatelessWidget{
+class Login extends StatefulWidget {
+  @override
+  _Login createState() => _Login();
+}
+
+class _Login extends State<Login>{
+  TextEditingController usernameController = new TextEditingController();
+  TextEditingController passwordController = new TextEditingController();
+
+  bool _isLoading = false;
+
+  signIn(String username, String password) async{
+    Map data ={
+      'username' : username,
+      'password' : password
+    };
+    var jsonData = null;
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var response = await http.post("http://192.168.1.72:8000/api/v1/login", body: data);
+    if(response.statusCode == 200){
+      jsonData = json.decode(response.body);
+      setState((){
+        _isLoading = false;
+      });
+      sharedPreferences.setString("token", jsonData['token']);
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Inicio()), (Route<dynamic> route) => false);
+
+    }else{
+      print(response.body);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +57,10 @@ class Login extends StatelessWidget{
         ],
       ),
       body: Container(
-        child: SingleChildScrollView(
+        child: _isLoading ? Center(child: CircularProgressIndicator(),):SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              Container(
+               Container(
                 height: 400,
                 decoration: BoxDecoration(
                     image: DecorationImage(
@@ -75,6 +111,7 @@ class Login extends StatelessWidget{
                             ),
                             child:
                             TextField(
+                              controller: usernameController,
                               decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: "Correo Electronico",
@@ -87,12 +124,14 @@ class Login extends StatelessWidget{
                           Container(
                             padding: EdgeInsets.all(8.0),
                             child: TextField(
+                              controller: passwordController,
                               decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: "Contraseña",
                                   hintStyle: TextStyle(color: Colors.grey[400]),
                                   prefixIcon: Icon(Icons.enhanced_encryption)
                               ),
+                              obscureText: true,
                             ),
                           )
                         ],
@@ -105,7 +144,13 @@ class Login extends StatelessWidget{
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.redAccent
                       ),
-                      child: Center(
+                      child: RaisedButton(
+                        onPressed: () {
+                          setState((){
+                            _isLoading = true;
+                          });
+                          signIn(usernameController.text, passwordController.text);
+                        },
                         child: Text("Login", style: TextStyle(color:Colors.white,fontWeight: FontWeight.bold),),
                       ),
                     ),

@@ -34,16 +34,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   int _currentIndex = 0;
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+
   final List<Widget> _children = [
     Inicio(),
-    Login(),
     Descripcion(),
     Otra(),
   ];
@@ -61,11 +55,6 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: Icon(Icons.home),
               title: Text('Inicio'),
               backgroundColor: Colors.deepPurpleAccent
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              title: Text('Login'),
-              backgroundColor: Color(0xff1d1d1d),
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.collections),
