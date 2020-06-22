@@ -18,6 +18,10 @@ class _Login extends State<Login>{
 
   bool _isLoading = false;
 
+  final Shader linearGradient = LinearGradient(
+    colors: <Color>[Colors.red, Colors.deepOrangeAccent],
+  ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 0.0));
+
   signIn(String username, String password) async{
     Map data ={
       'username' : username,
@@ -47,7 +51,7 @@ class _Login extends State<Login>{
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Text("Login"),
+        title: Text("Login", style: TextStyle(color: Colors.black38),),
         backgroundColor: Colors.transparent,
         actions: <Widget>[
           new IconButton(icon: const Icon(Icons.add,
@@ -72,14 +76,24 @@ class _Login extends State<Login>{
                   children: <Widget>[
                     Positioned(
                       child: Container(
-                        child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child:Icon(
-                              Icons.person,
-                              color: Colors.red,
-                              size: 200.0
-                          ) ,
-                        ),
+                        child: Stack(
+                          children: <Widget>[
+                            Container(
+                              padding: EdgeInsets.fromLTRB(0.0, 300.0, 0.0, 0.0),
+                              child: Text('LOGIN',
+                                  style: TextStyle(
+                                      fontSize: 80.0, fontWeight: FontWeight.bold, foreground: Paint()..shader = linearGradient)),
+                            ),
+                            Container(
+                              padding: EdgeInsets.fromLTRB(200.0, 300.0, 0.0, 0.0),
+                              child: Text('.',
+                                  style: TextStyle(
+                                      fontSize: 80.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.red)),
+                            )
+                          ],
+                        )
                       ),
                     )
                   ],
@@ -92,7 +106,7 @@ class _Login extends State<Login>{
                     Container(
                       padding: EdgeInsets.all(5),
                       decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Color(0xff1d1d1d),
                           borderRadius: BorderRadius.circular(10),
                           boxShadow: [
                             BoxShadow(
@@ -107,16 +121,17 @@ class _Login extends State<Login>{
                           Container(
                             padding: EdgeInsets.all(8.0),
                             decoration: BoxDecoration(
-                                border: Border(bottom: BorderSide(color: Colors.grey[100]))
+                                border: Border(bottom: BorderSide(color: Colors.red))
                             ),
                             child:
                             TextField(
                               controller: usernameController,
+                              style: TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: "Correo Electronico",
                                   hintStyle: TextStyle(color: Colors.grey[400], fontFamily: 'Montserrat',),
-                                  prefixIcon: Icon(Icons.email)
+                                  prefixIcon: Icon(Icons.email,color: Colors.deepOrangeAccent,)
 
                               ),
                             ),
@@ -125,11 +140,12 @@ class _Login extends State<Login>{
                             padding: EdgeInsets.all(8.0),
                             child: TextField(
                               controller: passwordController,
+                              style: TextStyle(color: Colors.white),
                               decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: "Contraseña",
                                   hintStyle: TextStyle(color: Colors.grey[400], fontFamily: 'Montserrat',),
-                                  prefixIcon: Icon(Icons.enhanced_encryption)
+                                  prefixIcon: Icon(Icons.enhanced_encryption, color: Colors.deepOrangeAccent,)
                               ),
                               obscureText: true,
                             ),
@@ -163,7 +179,7 @@ class _Login extends State<Login>{
                       ),
                       child: Material(
                           borderRadius: BorderRadius.circular(20),
-                          color: Colors.redAccent,
+                          color: Colors.red,
                           shadowColor: Colors.black,
                           elevation: 7,
                           child: GestureDetector(
