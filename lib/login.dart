@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:proyectomovil/inicio.dart';
+import 'package:proyectomovil/main.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -25,14 +25,14 @@ class _Login extends State<Login>{
     };
     var jsonData = null;
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    var response = await http.post("http://192.168.1.72:8000/api/v1/login", body: data);
+    var response = await http.post("http://192.168.42.115:8000/api/v1/login", body: data);
     if(response.statusCode == 200){
       jsonData = json.decode(response.body);
       setState((){
         _isLoading = false;
       });
       sharedPreferences.setString("token", jsonData['token']);
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Inicio()), (Route<dynamic> route) => false);
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => MyApp()), (Route<dynamic> route) => false);
 
     }else{
       print(response.body);
@@ -115,7 +115,7 @@ class _Login extends State<Login>{
                               decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: "Correo Electronico",
-                                  hintStyle: TextStyle(color: Colors.grey[400]),
+                                  hintStyle: TextStyle(color: Colors.grey[400], fontFamily: 'Montserrat',),
                                   prefixIcon: Icon(Icons.email)
 
                               ),
@@ -128,7 +128,7 @@ class _Login extends State<Login>{
                               decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: "Contraseña",
-                                  hintStyle: TextStyle(color: Colors.grey[400]),
+                                  hintStyle: TextStyle(color: Colors.grey[400], fontFamily: 'Montserrat',),
                                   prefixIcon: Icon(Icons.enhanced_encryption)
                               ),
                               obscureText: true,
@@ -137,22 +137,49 @@ class _Login extends State<Login>{
                         ],
                       ),
                     ),
+                    Container(
+                      alignment: Alignment(1.0, 0.0),
+                      padding: EdgeInsets.only(top: 15.0, left: 20.0),
+                      child: InkWell(
+                        onTap: null,
+                        child: Text(
+                          'Forgot Password',
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Montserrat',
+                              fontSize: 16,
+                              decoration: TextDecoration.underline),
+                        ),
+                      ),
+                    ),
                     SizedBox(height: 30,),
                     Container(
                       height: 50,
+                      width: 250,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.redAccent
                       ),
-                      child: RaisedButton(
-                        onPressed: () {
-                          setState((){
-                            _isLoading = true;
-                          });
-                          signIn(usernameController.text, passwordController.text);
-                        },
-                        child: Text("Login", style: TextStyle(color:Colors.white,fontWeight: FontWeight.bold),),
-                      ),
+                      child: Material(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.redAccent,
+                          shadowColor: Colors.black,
+                          elevation: 7,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState((){
+                                _isLoading = true;
+                              });
+                              signIn(usernameController.text, passwordController.text);
+                            },
+                            child: Center(
+                              child: Text("LOGIN", style: TextStyle(color:Colors.white,fontWeight: FontWeight.bold, fontSize: 20, fontFamily: 'Montserrat',),),
+
+
+                            )
+                          ),
+                        ),
                     ),
                     SizedBox(height: 70,),
 

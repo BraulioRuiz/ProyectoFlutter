@@ -3,6 +3,8 @@ import 'login.dart';
 import 'descripcion.dart';
 import 'inicio.dart';
 import 'Otra_cosa.dart';
+import 'package:proyectomovil/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
@@ -35,6 +37,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 0;
+  SharedPreferences sharedPreferences;
 
   final List<Widget> _children = [
     Inicio(),
